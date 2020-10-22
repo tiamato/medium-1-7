@@ -20,10 +20,10 @@ public class Player
 
     private void Load()
     {
-        var eventArgs = new PlayerInfo();
+        var playerInfo = new PlayerInfo();
 
-        OnLoad?.Invoke(this, eventArgs);
-        Health = eventArgs.Health;
+        OnLoad?.Invoke(this, playerInfo);
+        Health = playerInfo.Health;
     }
     
     public void ApplyDamage(float damage)
@@ -66,13 +66,6 @@ public class FileStorage : IDisposable
         }
     }
 
-    public void Dispose()
-    {
-        _player.OnLoad -= OnLoad;
-        _player.OnSave -= OnSave;
-        Players.Remove(_player.Id);
-    }
-
     private void OnSave()
     {
         File.WriteAllText($"user_{_player.Id}.data", _player.Health.ToString(CultureInfo.InvariantCulture));
@@ -88,5 +81,12 @@ public class FileStorage : IDisposable
         }
 
         if (float.TryParse(data, out var parseResult)) playerInfo.Health = parseResult;
+    }
+
+    public void Dispose()
+    {
+        _player.OnLoad -= OnLoad;
+        _player.OnSave -= OnSave;
+        Players.Remove(_player.Id);
     }
 }
