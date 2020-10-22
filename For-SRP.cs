@@ -18,7 +18,7 @@ public class Player
 
     public float Health { get; private set; }
 
-    private void Load()
+    public void Load()
     {
         var playerInfo = new PlayerInfo(Health);
 
@@ -64,6 +64,8 @@ public class FileStorage : IDisposable
             Players.Add(_player.Id);
             _player.OnLoad += OnLoad;
             _player.OnSave += OnSave;
+
+            _player.Load();
         }
         catch (Exception e)
         {
