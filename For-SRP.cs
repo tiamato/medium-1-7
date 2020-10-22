@@ -20,7 +20,7 @@ public class Player
 
     private void Load()
     {
-        var playerInfo = new PlayerInfo();
+        var playerInfo = new PlayerInfo(Health);
 
         OnLoad?.Invoke(this, playerInfo);
         Health = playerInfo.Health;
@@ -39,6 +39,11 @@ public class Player
 
 public class PlayerInfo : EventArgs
 {
+    public PlayerInfo(float health)
+    {
+        Health = health;
+    }
+
     public float Health { get; set; }
 }
 
@@ -73,13 +78,9 @@ public class FileStorage : IDisposable
 
     private void OnLoad(object sender, PlayerInfo playerInfo)
     {
-        var data = string.Empty;
+        if (!File.Exists(($"user_{_player.Id}.data"))) return;
 
-        if (File.Exists(($"user_{_player.Id}.data")))
-        {
-            data = File.ReadAllText($"user_{_player.Id}.data");
-        }
-
+        var data = File.ReadAllText($"user_{_player.Id}.data");
         if (float.TryParse(data, out var parseResult)) playerInfo.Health = parseResult;
     }
 
